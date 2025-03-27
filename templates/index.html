@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Schedule Exporter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f0f4ff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .banner {
+            background: linear-gradient(to right,rgb(122, 111, 143),rgb(125, 182, 123));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        .banner-text {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        .banner-subtext {
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+        .highlight {
+            font-weight: bold;
+        }
+        .social-links {
+            margin-top: 1rem;
+        }
+        .social-icon {
+            margin: 0 0.5rem;
+            color: white;
+            text-decoration: none;
+        }
+        .social-icon i {
+            margin-right: 0.25rem;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1f3b8c;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .checkbox {
+            margin: 10px 0;
+        }
+        .checkbox label {
+            margin-left: 8px;
+        }
+        button {
+            background: #1f3b8c;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #162c6a;
+        }
+        footer {
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 0.85rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Banner -->
+    <div class="banner">
+        <h1 class="banner-text">Exam Schedule Exporter</h1>
+        <p class="banner-subtext">
+            Developed by <span class="highlight">Roshan Chaudhary</span> - EPGP 16 Batch
+        </p>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/roshanchaudhary/" target="_blank" class="social-icon">
+                <i class="fab fa-linkedin-in"></i> LinkedIn
+            </a>
+            <a href="https://x.com/theroshanron" target="_blank" class="social-icon">
+                <i class="fab fa-twitter"></i> Twitter
+            </a>
+            <a href="https://www.instagram.com/theroshanron" target="_blank" class="social-icon">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Select Subjects</h1>
+        <form action="/generate-ics" method="post">
+            {% for code, subject in subjects.items() %}
+            <div class="checkbox">
+                <input type="checkbox" id="{{ code }}" name="subjects" value="{{ code }}">
+                <label for="{{ code }}">{{ subject.name }} ({{ code }})</label>
+            </div>
+            {% endfor %}
+            <button type="submit">Download ICS File</button>
+        </form>
+    </div>
+
+    <footer>
+        &copy; 2025 Exam Schedule Exporter | Created with ❤️ by Roshan Chaudhary
+    </footer>
+</body>
+</html>
