@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
-    <h1 class="title">Exam Schedule Exporter</h1>
-    <p class="subtitle">Select subjects and download your calendar in .ics format</p>
-    <form action="/generate-ics" method="post">
+    <h1 class="title">BPP Sessions Exporter</h1>
+    <p class="subtitle">Select sessions and download calendar file</p>
+    <form action="/generate-bpp-sessions" method="post">
         <div class="checkbox-list">
             {% for code, subject in subjects.items() %}
             <div class="checkbox-item">
@@ -13,7 +13,7 @@
             {% endfor %}
         </div>
         <div class="button-container">
-            <button type="submit" class="btn download-btn">Download .ics</button>
+            <button type="submit" class="btn download-btn">Download BPP Sessions</button>
         </div>
     </form>
 </div>

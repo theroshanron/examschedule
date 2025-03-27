@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Exam Schedule Exporter{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+        }
+
+        header {
+            background: linear-gradient(90deg, #ED4136, #A229B9);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        nav a {
+            color: white;
+            margin-left: 1.5rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        h1.title {
+            color: #ED4136;
+            font-size: 1.75rem;
+        }
+
+        .subtitle {
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkbox-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .checkbox-item {
+            background: #f3ecff;
+            border-radius: 6px;
+            padding: 0.75rem;
+        }
+
+        .checkbox-item label {
+            font-size: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .button-container {
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            background: #ED4136;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #b32e28;
+        }
+
+        footer {
+            background-color: #1e1e1e;
+            color: #ccc;
+            padding: 2rem 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            margin-top: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            margin: 0 0.75rem;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/">{% block header_title %}Schedule Exporter{% endblock %}</a>
+        <nav>
+            <a href="/">Exam Schedule</a>
+            <a href="/bpp">BPP Timeline</a>
+            <a href="/bpp-sessions">BPP Sessions</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div>
+            Developed by <strong>Roshan Chaudhary</strong> – EPGP 16 Batch
+        </div>
+        <div class="footer-links">
+            <a href="https://www.linkedin.com/in/roshanchaudhary/" target="_blank">
+                <i class="fab fa-linkedin-in"></i> LinkedIn
+            </a>
+            <a href="https://x.com/theroshanron" target="_blank">
+                <i class="fab fa-twitter"></i> Twitter
+            </a>
+            <a href="https://www.instagram.com/theroshanron" target="_blank">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+        </div>
+        <div style="margin-top: 0.5rem;">
+            &copy; {{ current_year }} Schedule Exporter
+        </div>
+    </footer>
+</body>
+</html>
