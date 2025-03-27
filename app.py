@@ -1,7 +1,8 @@
-from flask import Flask, request, send_file, render_template
+from flask import Flask, request, send_file, render_template, redirect, url_for
 from datetime import datetime
 import pytz
 import io
+import os
 
 app = Flask(__name__)
 
@@ -79,8 +80,15 @@ def generate_ics():
     ics.append("END:VCALENDAR")
     ics_data = "\n".join(ics)
 
+    with open("schedule.ics", "w", encoding="utf-8") as f:
+        f.write(ics_data)
+
+    return redirect(url_for('download_ics'))
+
+@app.route('/download')
+def download_ics():
     return send_file(
-        io.BytesIO(ics_data.encode("utf-8")),
+        "schedule.ics",
         mimetype="text/calendar",
         as_attachment=True,
         download_name="exam_schedule.ics"
