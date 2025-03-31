@@ -6,6 +6,17 @@ import os
 
 app = Flask(__name__)
 
+def parse_time_with_fix(date_str, start_str, end_str):
+    start_dt = datetime.strptime(f"{date_str} {start_str}", "%Y-%m-%d %H:%M")
+    end_dt = datetime.strptime(f"{date_str} {end_str}", "%Y-%m-%d %H:%M")
+    
+    # Auto-fix: if end time is earlier than start time, assume it's PM and add 12 hours
+    if end_dt <= start_dt:
+        end_dt += timedelta(hours=12)
+    
+    return start_dt, end_dt
+
+
 schedule = {
     "EFM-02": {"name": "Security Analysis and Portfolio Management", "date": "2025-04-06", "time": "17:30-20:30"},
     "EFM-01": {"name": "Advanced Management Accounting", "date": "2025-04-06", "time": "17:30-20:30"},
@@ -104,6 +115,19 @@ bpp_sessions = {
 def bpp_sessions_page():
     return render_template('bpp_sessions.html', subjects=bpp_sessions)
 
+from datetime import datetime, timedelta  # Make sure this is at the top
+
+# Helper function to fix end time if earlier than start time
+def parse_time_with_fix(date_str, start_str, end_str):
+    start_dt = datetime.strptime(f"{date_str} {start_str}", "%Y-%m-%d %H:%M")
+    end_dt = datetime.strptime(f"{date_str} {end_str}", "%Y-%m-%d %H:%M")
+
+    # Auto-fix: if end time is earlier than start, assume PM and add 12 hours
+    if end_dt <= start_dt:
+        end_dt += timedelta(hours=12)
+
+    return start_dt, end_dt
+
 @app.route('/generate-bpp-sessions', methods=['POST'])
 def generate_bpp_sessions():
     selected = request.form.getlist('subjects')
@@ -118,8 +142,7 @@ def generate_bpp_sessions():
         sub = bpp_sessions[code]
         name, date_str, time_str = sub["name"], sub["date"], sub["time"]
         start, end = time_str.split('-')
-        start_dt = datetime.strptime(f"{date_str} {start}", "%Y-%m-%d %H:%M")
-        end_dt = datetime.strptime(f"{date_str} {end}", "%Y-%m-%d %H:%M")
+        start_dt, end_dt = parse_time_with_fix(date_str, start.strip(), end.strip())
 
         ics += [
             "BEGIN:VEVENT",
@@ -147,6 +170,7 @@ def generate_bpp_sessions():
     with open("bpp_sessions.ics", "w", encoding="utf-8") as f:
         f.write("\n".join(ics))
     return redirect(url_for('download_bpp_sessions'))
+
 
 @app.route('/')
 def index():

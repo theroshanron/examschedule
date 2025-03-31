@@ -1,154 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>{% block title %}Exam Schedule Exporter{% endblock %}</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
     <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f9f9f9;
-        }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f9f9f9;
+      }
 
-        header {
-            background: linear-gradient(90deg, #ED4136, #A229B9);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      header {
+        background: linear-gradient(90deg, #ed4136, #a229b9);
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-        header a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.3rem;
-        }
+      header a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.3rem;
+      }
 
-        nav a {
-            color: white;
-            margin-left: 1.5rem;
-            font-weight: 500;
-        }
+      nav a {
+        color: white;
+        margin-left: 1.5rem;
+        font-weight: 500;
+      }
 
-        nav a:hover {
-            text-decoration: underline;
-        }
+      nav a:hover {
+        text-decoration: underline;
+      }
 
-        main {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
+      main {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
 
-        h1.title {
-            color: #ED4136;
-            font-size: 1.75rem;
-        }
+      h1.title {
+        color: #ed4136;
+        font-size: 1.75rem;
+      }
 
-        .subtitle {
-            color: #555;
-            margin-bottom: 1.5rem;
-        }
+      .subtitle {
+        color: #555;
+        margin-bottom: 1.5rem;
+      }
 
-        .checkbox-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
+      .checkbox-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
 
-        .checkbox-item {
-            background: #f3ecff;
-            border-radius: 6px;
-            padding: 0.75rem;
-        }
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        background: #f7f2ff;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+        position: relative;
+      }
 
-        .checkbox-item label {
-            font-size: 1rem;
-            margin-left: 0.5rem;
-        }
+      .checkbox-item:hover {
+        background: #ece0ff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      }
 
-        .button-container {
-            margin-top: 1.5rem;
-        }
+      .checkbox-item input[type="checkbox"] {
+        display: none;
+      }
 
-        .btn {
-            background: #ED4136;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
+      .custom-checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #a229b9;
+        border-radius: 50%;
+        margin-right: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: white;
+        transition: all 0.2s ease;
+      }
 
-        .btn:hover {
-            background: #b32e28;
-        }
+      .custom-checkbox i {
+        color: white;
+        font-size: 12px;
+        display: none;
+      }
 
-        footer {
-            background-color: #1e1e1e;
-            color: #ccc;
-            padding: 2rem 1rem;
-            text-align: center;
-            font-size: 0.95rem;
-        }
+      .checkbox-item input[type="checkbox"]:checked + .custom-checkbox {
+        background: #a229b9;
+        border-color: #a229b9;
+      }
 
-        .footer-links {
-            margin-top: 0.5rem;
-        }
+      .checkbox-item input[type="checkbox"]:checked + .custom-checkbox i {
+        display: block;
+      }
 
-        .footer-links a {
-            color: #ccc;
-            margin: 0 0.75rem;
-            text-decoration: none;
-        }
+      .checkbox-item label {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        color: #333;
+        cursor: pointer;
+        gap: 10px;
+      }
 
-        .footer-links a:hover {
-            text-decoration: underline;
-            color: #fff;
-        }
+      .checkbox-item input[type="checkbox"]:checked ~ label {
+        font-weight: 600;
+        color: #a229b9;
+      }
+
+      .button-container {
+        margin-top: 1.5rem;
+      }
+
+      .btn {
+        background: #ed4136;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background: #b32e28;
+      }
+
+      footer {
+        background-color: #1e1e1e;
+        color: #ccc;
+        padding: 2rem 1rem;
+        text-align: center;
+        font-size: 0.95rem;
+      }
+
+      .footer-links {
+        margin-top: 0.5rem;
+      }
+
+      .footer-links a {
+        color: #ccc;
+        margin: 0 0.75rem;
+        text-decoration: none;
+      }
+
+      .footer-links a:hover {
+        text-decoration: underline;
+        color: #fff;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <a href="/">{% block header_title %}Schedule Exporter{% endblock %}</a>
-        <nav>
-            <a href="/">Exam Schedule</a>
-            <a href="/bpp">BPP Timeline</a>
-            <a href="/bpp-sessions">BPP Sessions</a>
-            <a href="https://electives.onrender.com/" target="_blank">Elective Scheduler</a>
-        </nav>
+      <a href="/">{% block header_title %}Schedule Exporter{% endblock %}</a>
+      <nav>
+        <a href="/">Exam Schedule</a>
+        <a href="/bpp">BPP Timeline</a>
+        <a href="/bpp-sessions">BPP Sessions</a>
+        <a href="https://electives.onrender.com/" target="_blank"
+          >Elective Scheduler</a
+        >
+      </nav>
     </header>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+    <main>{% block content %}{% endblock %}</main>
 
     <footer>
-        <div>
-            Developed by <strong>Roshan Chaudhary</strong> – EPGP 16 Batch
-        </div>
-        <div class="footer-links">
-            <a href="https://www.linkedin.com/in/roshanchaudhary/" target="_blank">
-                <i class="fab fa-linkedin-in"></i> LinkedIn
-            </a>
-            <a href="https://x.com/theroshanron" target="_blank">
-                <i class="fab fa-twitter"></i> Twitter
-            </a>
-            <a href="https://www.instagram.com/theroshanron" target="_blank">
-                <i class="fab fa-instagram"></i> Instagram
-            </a>
-        </div>
-        <div style="margin-top: 0.5rem;">
-            &copy; {{ current_year }} Schedule Exporter
-        </div>
+      <div>Developed by <strong>Roshan Chaudhary</strong> – EPGP 16 Batch</div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/roshanchaudhary/" target="_blank">
+          <i class="fab fa-linkedin-in"></i> LinkedIn
+        </a>
+        <a href="https://x.com/theroshanron" target="_blank">
+          <i class="fab fa-twitter"></i> Twitter
+        </a>
+        <a href="https://www.instagram.com/theroshanron" target="_blank">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+      </div>
+      <div style="margin-top: 0.5rem">
+        &copy; {{ current_year }} Schedule Exporter
+      </div>
     </footer>
-</body>
+  </body>
 </html>

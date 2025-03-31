@@ -1,20 +1,30 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="container">
-    <h1 class="title">BPP Timeline Exporter</h1>
-    <p class="subtitle">Select timeline events and download .ics</p>
-    <form action="/generate-bpp" method="post">
-        <div class="checkbox-list">
-            {% for code, subject in subjects.items() %}
-            <div class="checkbox-item">
-                <input type="checkbox" id="{{ code }}" name="subjects" value="{{ code }}">
-                <label for="{{ code }}">{{ subject.name }} ({{ subject.date }})</label>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="button-container">
-            <button type="submit" class="btn download-btn">Download BPP Timeline</button>
-        </div>
-    </form>
+  <h1 class="title">BPP Timeline Exporter</h1>
+  <p class="subtitle">Select timeline events and download .ics</p>
+  <form action="/generate-bpp" method="post">
+    <div class="checkbox-list">
+      {% for code, subject in subjects.items() %}
+      <div class="checkbox-item">
+        <label for="{{ code }}">
+          <input
+            type="checkbox"
+            id="{{ code }}"
+            name="subjects"
+            value="{{ code }}"
+          />
+          <span class="custom-checkbox"><i class="fas fa-check"></i></span>
+          {{ subject.name }} ({{ subject.date }})
+        </label>
+      </div>
+
+      {% endfor %}
+    </div>
+    <div class="button-container">
+      <button type="submit" class="btn download-btn">
+        Download BPP Timeline
+      </button>
+    </div>
+  </form>
 </div>
 {% endblock %}
