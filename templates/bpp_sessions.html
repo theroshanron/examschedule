@@ -1,8 +1,10 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
 <div class="container">
   <h1 class="title">BPP Sessions Exporter</h1>
   <p class="subtitle">Select sessions and download calendar file</p>
-  <form action="/generate-bpp-sessions" method="post">
+
+  <form action="{{ url_for('generate_bpp_sessions') }}" method="post">
     <div class="checkbox-list">
       {% for code, subject in subjects.items() %}
       <div class="checkbox-item">
@@ -14,12 +16,12 @@
             value="{{ code }}"
           />
           <span class="custom-checkbox"><i class="fas fa-check"></i></span>
-          {{ subject.name }} ({{ subject.date }} | {{ subject.time }})
+          {{ subject.name }} ({{ subject.date }}{% if subject.time %} | {{ subject.time }}{% else %} | All Day{% endif %})
         </label>
       </div>
-
       {% endfor %}
     </div>
+
     <div class="button-container">
       <button type="submit" class="btn download-btn">
         Download BPP Sessions

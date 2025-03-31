@@ -131,6 +131,9 @@ def parse_time_with_fix(date_str, start_str, end_str):
 @app.route('/generate-bpp-sessions', methods=['POST'])
 def generate_bpp_sessions():
     selected = request.form.getlist('subjects')
+    if not selected:
+        return "No sessions selected", 400
+
     ics = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
@@ -139,38 +142,63 @@ def generate_bpp_sessions():
     ]
 
     for code in selected:
-        sub = bpp_sessions[code]
-        name, date_str, time_str = sub["name"], sub["date"], sub["time"]
-        start, end = time_str.split('-')
-        start_dt, end_dt = parse_time_with_fix(date_str, start.strip(), end.strip())
+        sub = bpp_sessions.get(code)
+        if not sub:
+            continue
 
-        ics += [
-            "BEGIN:VEVENT",
-            f"UID:{code}@iimk.bpp.session",
-            f"DTSTAMP:{datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')}",
-            f"SUMMARY:{name}",
-            f"DESCRIPTION:{name} - {code}",
-            f"LOCATION:IIM Kozhikode",
-            f"DTSTART;TZID=Asia/Kolkata:{start_dt.strftime('%Y%m%dT%H%M%S')}",
-            f"DTEND;TZID=Asia/Kolkata:{end_dt.strftime('%Y%m%dT%H%M%S')}",
-            "BEGIN:VALARM",
-            "TRIGGER:-PT10080M",
-            "ACTION:DISPLAY",
-            "DESCRIPTION:Reminder 1 week before",
-            "END:VALARM",
-            "BEGIN:VALARM",
-            "TRIGGER:-PT1440M",
-            "ACTION:DISPLAY",
-            "DESCRIPTION:Reminder 1 day before",
-            "END:VALARM",
-            "END:VEVENT"
-        ]
+        name = sub.get("name")
+        date_str = sub.get("date")
+
+        if not name or not date_str:
+            continue
+
+        if "time" not in sub:
+            dt = datetime.strptime(date_str, "%Y-%m-%d")
+            ics += [
+                "BEGIN:VEVENT",
+                f"UID:{code}@iimk.bpp.session",
+                f"DTSTAMP:{datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')}",
+                f"SUMMARY:{name}",
+                f"DESCRIPTION:{name} - {code}",
+                f"LOCATION:IIM Kozhikode",
+                f"DTSTART;VALUE=DATE:{dt.strftime('%Y%m%d')}",
+                f"DTEND;VALUE=DATE:{(dt + timedelta(days=1)).strftime('%Y%m%d')}",
+                "TRANSP:TRANSPARENT",
+                "CATEGORIES:All Day",
+                "END:VEVENT"
+            ]
+        else:
+            start, end = sub["time"].split('-')
+            start_dt, end_dt = parse_time_with_fix(date_str, start.strip(), end.strip())
+            ics += [
+                "BEGIN:VEVENT",
+                f"UID:{code}@iimk.bpp.session",
+                f"DTSTAMP:{datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')}",
+                f"SUMMARY:{name}",
+                f"DESCRIPTION:{name} - {code}",
+                f"LOCATION:IIM Kozhikode",
+                f"DTSTART;TZID=Asia/Kolkata:{start_dt.strftime('%Y%m%dT%H%M%S')}",
+                f"DTEND;TZID=Asia/Kolkata:{end_dt.strftime('%Y%m%dT%H%M%S')}",
+                "BEGIN:VALARM",
+                "TRIGGER:-PT10080M",
+                "ACTION:DISPLAY",
+                "DESCRIPTION:Reminder 1 week before",
+                "END:VALARM",
+                "BEGIN:VALARM",
+                "TRIGGER:-PT1440M",
+                "ACTION:DISPLAY",
+                "DESCRIPTION:Reminder 1 day before",
+                "END:VALARM",
+                "CATEGORIES:Timed",
+                "END:VEVENT"
+            ]
 
     ics.append("END:VCALENDAR")
+
     with open("bpp_sessions.ics", "w", encoding="utf-8") as f:
         f.write("\n".join(ics))
-    return redirect(url_for('download_bpp_sessions'))
 
+    return redirect(url_for('download_bpp_sessions'))
 
 @app.route('/')
 def index():
