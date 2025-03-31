@@ -1,5 +1,5 @@
 from flask import Flask, request, send_file, render_template, redirect, url_for
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 import io
 import os
@@ -222,7 +222,7 @@ def generate_bpp():
             f"DTSTAMP:{datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')}",
             f"SUMMARY:{item['name']}",
             f"DTSTART;VALUE=DATE:{dt.strftime('%Y%m%d')}",
-            f"DTEND;VALUE=DATE:{(dt.replace(day=dt.day+1)).strftime('%Y%m%d')}",
+            f"DTEND;VALUE=DATE:{(dt + timedelta(days=1)).strftime('%Y%m%d')}",
             "TRANSP:TRANSPARENT",
             "END:VEVENT"
         ]
